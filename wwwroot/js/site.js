@@ -1,4 +1,80 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+let context = {
+    device: "mobile",
+    tripType: ""
+};
 
-// Write your JavaScript code.
+let userAgent = {};
+const tripTypeOptions = ["Trek", "Camping", "RoadTrip", "Beach", "BagPacking"];
+var personalizerCallResult = "";
+function getRecommendation() {
+    const requestContext = {
+        device: context.device,
+        tripType: context.tripType
+     };
+
+    return fetch("/Tour/Recommendation", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestContext)
+    }).then(r => r.json());
+}
+
+context.tripType = getRandomOption(tripTypeOptions);
+
+function getRandomOption(options) {
+    var randomNumber = Math.floor(Math.random() * options.length);
+
+    return options[randomNumber];
+}
+
+var dict = {
+    "1": "https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg",
+    "2": "https://cdn.pixabay.com/photo/2019/06/28/03/07/camping-4303357_960_720.jpg",
+    "3": "https://cdn.pixabay.com/photo/2019/04/04/09/11/cycling-4102251_960_720.jpg",
+    "4": "https://cdn.pixabay.com/photo/2016/03/04/19/36/beach-1236581__340.jpg",
+    "5": "https://cdn.pixabay.com/photo/2016/03/26/22/16/nature-1281574_960_720.jpg"
+};
+
+$(document).ready(function () {
+    getRecommendation().then(result => {
+        personalizerCallResult = result;
+        UpdateDataWithPersonalizer(personalizerCallResult);
+    });
+
+    //if ($("#articleViewer").is(":visible")) {
+    //    sendReward(personalizerCallResult.eventId, 1);
+    //}
+});
+
+function UpdateDataWithPersonalizer(result) {
+    var id = result.rewardActionId;
+    var img = dict[id];
+    $(".img-responsive").attr("src", img);
+   // $("#articleLink").attr("href", "/Home/Article/"+id);
+}
+
+
+
+$("#tourLink").click(function (event) {
+    event.preventDefault();
+    sendReward(personalizerCallResult.eventId, 1).then(() => {
+        location.href = "/Home/Tour/"+personalizerCallResult.rewardActionId;
+    });
+});
+
+
+function sendReward(eventid, value) {
+    return fetch("/Tour/Reward", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            eventid: eventid,
+            value: value
+        })
+    });
+}

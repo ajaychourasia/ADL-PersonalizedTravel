@@ -1,0 +1,11 @@
+{
+  "RewardTimer": {
+    "DecreaseAmount": "0.00050",
+    "DecreaseInterval": "0.02",
+    "DecreaseLimit": "0.5",
+    "InitValue": "1",
+    "SaveForLaterReward": "0.2"
+  }
+}
+
+//remove this file

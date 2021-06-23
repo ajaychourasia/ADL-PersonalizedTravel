@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using ADL.PersonalizedTravel.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Azure.CognitiveServices.Personalizer;
+using ADL.PersonalizedTravel.Repositories;
+using ADL.PersonalizedTravel.Services;
 
 namespace ADL.PersonalizedTravel
 {
@@ -27,6 +30,13 @@ namespace ADL.PersonalizedTravel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var personalizationEndPoint = Configuration["PersonalizationEndpoint"];
+            var personalizationApiKey = Configuration["PersonalizationApiKey"];
+            if (string.IsNullOrEmpty(personalizationEndPoint) || string.IsNullOrEmpty(personalizationApiKey))
+            {
+                ///throw new ArgumentException("Missing Azure Personalizer endpoint and/or api key.");
+            }
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -34,11 +44,17 @@ namespace ADL.PersonalizedTravel
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSingleton<IPersonalizerClient>(s => CreateClient(personalizationEndPoint, personalizationApiKey));
+            services.AddSingleton<IRankableActionRepository, RankableActionRepository>();
+            services.AddSingleton<IPersonalizerService, PersonalizerService>();
+            services.AddSingleton<IActionRepository, ActionRepository>();
+            services.AddSingleton<ITourRepository, TourRepository>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -68,7 +84,23 @@ namespace ADL.PersonalizedTravel
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                 name: "recommendation",
+                 template: "{controller=Tour}/{action=Recommendation}");
+
+                routes.MapRoute(
+               name: "reward",
+               template: "{controller=Tour}/{action=Reward}/{id?}");
             });
+        }
+        private IPersonalizerClient CreateClient(string uri, string ApiKey)
+        {
+            return new PersonalizerClient(
+                new ApiKeyServiceClientCredentials(ApiKey))
+            {
+                Endpoint = uri
+            };
         }
     }
 }

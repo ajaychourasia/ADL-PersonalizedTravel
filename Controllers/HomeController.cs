@@ -5,14 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ADL.PersonalizedTravel.Models;
+using ADL.PersonalizedTravel.Services;
+using ADL.PersonalizedTravel.Controllers.Extensions;
+using ADL.PersonalizedTravel.Repositories;
 
 namespace ADL.PersonalizedTravel.Controllers
 {
+
     public class HomeController : Controller
     {
+        private readonly IPersonalizerService _service;
+        private readonly ITourRepository _tourRepository;
+
+        public HomeController(IPersonalizerService service, ITourRepository tourRepository)
+        {
+            _service = service;
+            _tourRepository = tourRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Tour(string id)
+        {
+            var model = _tourRepository.GetTour(id);
+            ViewData["Title"] = model.Title;
+            return View(model);
         }
 
         public IActionResult About()
