@@ -13,7 +13,15 @@ namespace ADL.PersonalizedTravel.Controllers.Extensions
         {
             var result = new List<object>
             {
-                new {context.Device, context.tripType, context.TravelerHistory}
+                new {context.Device,
+                    //context.TripType,
+                    context.TravelerHistory,
+                    context.Gender,
+                    context.TripPreference,
+                    context.Country,
+                    context.PartofDay,
+                    context.Season
+                }
             };
 
             if (request != null)

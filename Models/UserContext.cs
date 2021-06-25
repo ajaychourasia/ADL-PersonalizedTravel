@@ -9,17 +9,21 @@ namespace ADL.PersonalizedTravel.Models
     {
         public bool UseUserAgent { get; set; }
 
-        public string tripType { get; set; }
+        //public string TripType { get; set; }
 
         public string TravelerHistory { get; set; }
 
         public string Device { get; set; }
 
-        public string Age { get; set; }
+        public string Country { get; set; }
 
         public string Gender { get; set; }
 
-        public DateTime time { get; set; }
+        public string TripPreference{ get; set; }
+
+        public string PartofDay { get; set; }
+
+        public string Season { get; set; }
        
     }
 }

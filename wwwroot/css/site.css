@@ -55,3 +55,27 @@ body {
     clear: both;
     display: table;
 }
+p.outset {
+    border-style: outset;
+    text-align: center;
+    background-color: darkcyan;
+    color: white;
+    font-size: x-large;
+}
+.centered {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: -webkit-pictograph;
+    font-size: xx-large;
+    color: black;
+    background-color: darkturquoise;
+}
+
+.recomm {
+    margin-top: 20px
+}
+.suggest {
+    margin: 0px 0px 1px 5px;
+}

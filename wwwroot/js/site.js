@@ -1,16 +1,16 @@
 ﻿
 let context = {
-    device: "mobile",
-    tripType: ""
+    device: "mobile"
+    //TripType: ""
 };
 
 let userAgent = {};
-const tripTypeOptions = ["Trek", "Camping", "RoadTrip", "Beach", "BagPacking"];
+//const tripTypeOptions = ["Trek", "Camping", "RoadTrip", "Beach", "BagPacking"];
 var personalizerCallResult = "";
 function getRecommendation() {
     const requestContext = {
-        device: context.device,
-        tripType: context.tripType
+        device: context.device
+        //tripType: context.TripType
      };
 
     return fetch("/Tour/Recommendation", {
@@ -22,13 +22,14 @@ function getRecommendation() {
     }).then(r => r.json());
 }
 
-context.tripType = getRandomOption(tripTypeOptions);
 
-function getRandomOption(options) {
-    var randomNumber = Math.floor(Math.random() * options.length);
+//context.tripType = getRandomOption(tripTypeOptions);
 
-    return options[randomNumber];
-}
+//function getRandomOption(options) {
+//    var randomNumber = Math.floor(Math.random() * options.length);
+
+//    return options[randomNumber];
+//}
 
 var dict = {
     "1": "https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg",
@@ -44,18 +45,28 @@ $(document).ready(function () {
         UpdateDataWithPersonalizer(personalizerCallResult);
     });
 
-    //if ($("#articleViewer").is(":visible")) {
-    //    sendReward(personalizerCallResult.eventId, 1);
-    //}
 });
 
-function UpdateDataWithPersonalizer(result) {
-    var id = result.rewardActionId;
-    var img = dict[id];
-    $(".img-responsive").attr("src", img);
-   // $("#articleLink").attr("href", "/Home/Article/"+id);
-}
+function UpdateDataWithPersonalizer(personalizerCallResult) {
+    getTourDetails(personalizerCallResult.rewardActionId).then(res => {
+        var img = res.Image;
+        $(".img-responsive").attr("src", img);
+    });
+  }
 
+function getTourDetails(tourId) {
+    const requestContext = {
+        id: tourId
+    };
+
+    return fetch("/Tour/GetTour", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestContext)
+    }).then(r => r.json());
+}
 
 
 $("#tourLink").click(function (event) {

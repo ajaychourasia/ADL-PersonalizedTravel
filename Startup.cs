@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Azure.CognitiveServices.Personalizer;
 using ADL.PersonalizedTravel.Repositories;
 using ADL.PersonalizedTravel.Services;
+using ADL.PersonalizedTravel.Models;
 
 namespace ADL.PersonalizedTravel
 {
@@ -52,10 +53,9 @@ namespace ADL.PersonalizedTravel
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
+            services.AddDefaultIdentity<AppUser>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddIdentity<AppUser,IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

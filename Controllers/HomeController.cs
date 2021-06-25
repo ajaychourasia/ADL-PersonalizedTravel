@@ -8,6 +8,7 @@ using ADL.PersonalizedTravel.Models;
 using ADL.PersonalizedTravel.Services;
 using ADL.PersonalizedTravel.Controllers.Extensions;
 using ADL.PersonalizedTravel.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace ADL.PersonalizedTravel.Controllers
 {
@@ -16,13 +17,13 @@ namespace ADL.PersonalizedTravel.Controllers
     {
         private readonly IPersonalizerService _service;
         private readonly ITourRepository _tourRepository;
-
+      
         public HomeController(IPersonalizerService service, ITourRepository tourRepository)
         {
             _service = service;
             _tourRepository = tourRepository;
-        }
-
+         }
+        
         public IActionResult Index()
         {
             return View();
