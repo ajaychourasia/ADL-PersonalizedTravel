@@ -57,6 +57,9 @@ namespace ADL.PersonalizedTravel
                     .AddEntityFrameworkStores<ApplicationDbContext>();
             //services.AddIdentity<AppUser,IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions aiOptions                = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions();            aiOptions.EnableRequestTrackingTelemetryModule = false;            services.AddApplicationInsightsTelemetry(aiOptions);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

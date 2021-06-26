@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ADL.PersonalizedTravel.Models;
+using ADL.PersonalizedTravel.Utilities;
+using System.Security.Claims;
 
 namespace ADL.PersonalizedTravel.Areas.Identity.Pages.Account
 {
@@ -18,6 +20,7 @@ namespace ADL.PersonalizedTravel.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<AppUser> _userManager;
 
         public LoginModel(SignInManager<AppUser> signInManager, ILogger<LoginModel> logger)
         {
@@ -64,6 +67,7 @@ namespace ADL.PersonalizedTravel.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+            
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

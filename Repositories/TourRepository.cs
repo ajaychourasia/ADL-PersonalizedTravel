@@ -9,25 +9,39 @@ namespace ADL.PersonalizedTravel.Repositories
 {
     public class TourRepository : ITourRepository
     {
-        private IList<TourDetail> _tours;
+        private IList<TourCategory> _tours;
+        private IList<TourActivity> _activity;
 
         public TourRepository(IHostingEnvironment hostingEnvironment)
         {
             var fileProvider = hostingEnvironment.ContentRootFileProvider;
-            var contents = fileProvider.GetDirectoryContents("toursDetail");
+            var contents = fileProvider.GetDirectoryContents("TourCategories");
             _tours = contents
                             .Select(file => System.IO.File.ReadAllText(file.PhysicalPath))
-                            .Select(fileContent => JsonConvert.DeserializeObject<TourDetail>(fileContent))
+                            .Select(fileContent => JsonConvert.DeserializeObject<TourCategory>(fileContent))
                             .Where(a => a.Enabled)
                             .ToList();
+
+            var activityContents = fileProvider.GetDirectoryContents("TourActivities");
+
+            _activity = activityContents
+                            .Select(file => System.IO.File.ReadAllText(file.PhysicalPath))
+                            .Select(fileContent => JsonConvert.DeserializeObject<TourActivity>(fileContent))
+                            .Where(a => a.Enabled)
+                            .ToList();
+            
         }
 
-        public TourDetail GetTour(string id)
+        public List<TourActivity> GetTourActivity(string tourId)
+        {
+            return _activity.Where(activity => tourId == activity.TourCategoryId).ToList();
+        }
+        public TourCategory GetTour(string id)
         {
             return _tours.FirstOrDefault(tours => tours.Id == id);
         }
 
-        public IList<TourDetail> GetTour()
+        public IList<TourCategory> GetTour()
         {
             return _tours.ToList();
         }

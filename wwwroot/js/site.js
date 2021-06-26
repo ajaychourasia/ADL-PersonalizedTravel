@@ -1,17 +1,15 @@
 ﻿
 let context = {
-    device: "mobile"
-    //TripType: ""
+    device: "Desktop"
 };
 
 let userAgent = {};
-//const tripTypeOptions = ["Trek", "Camping", "RoadTrip", "Beach", "BagPacking"];
+
 var personalizerCallResult = "";
 function getRecommendation() {
     const requestContext = {
         device: context.device
-        //tripType: context.TripType
-     };
+    };
 
     return fetch("/Tour/Recommendation", {
         method: "POST",
@@ -23,40 +21,33 @@ function getRecommendation() {
 }
 
 
-//context.tripType = getRandomOption(tripTypeOptions);
-
-//function getRandomOption(options) {
-//    var randomNumber = Math.floor(Math.random() * options.length);
-
-//    return options[randomNumber];
-//}
-
-var dict = {
-    "1": "https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg",
-    "2": "https://cdn.pixabay.com/photo/2019/06/28/03/07/camping-4303357_960_720.jpg",
-    "3": "https://cdn.pixabay.com/photo/2019/04/04/09/11/cycling-4102251_960_720.jpg",
-    "4": "https://cdn.pixabay.com/photo/2016/03/04/19/36/beach-1236581__340.jpg",
-    "5": "https://cdn.pixabay.com/photo/2016/03/26/22/16/nature-1281574_960_720.jpg"
-};
-
 $(document).ready(function () {
     getRecommendation().then(result => {
         personalizerCallResult = result;
         UpdateDataWithPersonalizer(personalizerCallResult);
     });
+    
+    //appInsights.context.user.authenticatedId
+    //appInsights.context.user.id
+    //GetPersonalizedTourActivities();
+    //GetClusterData();
+    //$("#PriorityOne").attr("src", "");
+    //$("#PriorityTwo").attr("src", "");
+    //$("#PriorityOne").attr("src", "");
 
 });
 
 function UpdateDataWithPersonalizer(personalizerCallResult) {
     getTourDetails(personalizerCallResult.rewardActionId).then(res => {
-        var img = res.Image;
+        var img = res.image;
         $(".img-responsive").attr("src", img);
+        $("#featureTourTitle").html(res.title);
     });
   }
 
 function getTourDetails(tourId) {
-    const requestContext = {
-        id: tourId
+    const requestBody = {
+        Id: tourId
     };
 
     return fetch("/Tour/GetTour", {
@@ -64,7 +55,27 @@ function getTourDetails(tourId) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(requestContext)
+        body: JSON.stringify(requestBody)
+    }).then(r => r.json());
+}
+
+function getTourActivity() {
+    return fetch("/Tour/GetPersonalizedTourActivities", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify()
+    }).then(r => r.json());
+}
+
+function GetClusterData() {
+    return fetch("/Tour/GetCluster", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify()
     }).then(r => r.json());
 }
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace ADL.PersonalizedTravel.Models
 {
    
-    public class TourDetail
+    public class TourCategory
     {
-        public TourDetail()
+        public TourCategory()
         {
             Enabled = true;
         }

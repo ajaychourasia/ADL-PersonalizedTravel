@@ -9,6 +9,7 @@ using ADL.PersonalizedTravel.Services;
 using ADL.PersonalizedTravel.Controllers.Extensions;
 using ADL.PersonalizedTravel.Repositories;
 using Microsoft.AspNetCore.Identity;
+using ADL.PersonalizedTravel.Utilities;
 
 namespace ADL.PersonalizedTravel.Controllers
 {
@@ -32,6 +33,7 @@ namespace ADL.PersonalizedTravel.Controllers
         public IActionResult Tour(string id)
         {
             var model = _tourRepository.GetTour(id);
+            AppInsightsHelper.TrackPageView(model.Title); 
             ViewData["Title"] = model.Title;
             return View(model);
         }
