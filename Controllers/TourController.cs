@@ -69,34 +69,55 @@ namespace ADL.PersonalizedTravel.Controllers
             return View();
         }
 
-        public JsonResult GetPersonalizedTourActivities(TourCategory tour)
-        {     
-            var model = _tourRepository.GetTourActivity("3");
+        public JsonResult GetPersonalizedTourActivities()
+        {
+            string userId = string.Empty;
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+            }
+            else
+            {
+                if(Request.Cookies.ContainsKey("ai_user"))
+                {
+                    userId = Request.Cookies["ai_user"].Split("|")[0];
+                }
+            }
+            var clusterId = GetCluster(userId);
+            var model = _tourRepository.GetTourActivity(clusterId);
             return new JsonResult(model);
         }
 
-        public int GetCluster()
+        public string GetCluster(string userId)
         {
-            int clusterId = 0;
+            string clusterId = "1";
             string SqlConnection = "Server=tcp:traveldemosqlserver.database.windows.net,1433;Initial Catalog=traveldemoapp;Persist Security Info=False;User ID=azureuser;Password={*****}; MultipleActiveResultSets =False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             using (var connection = new SqlConnection(SqlConnection))
             {
-                var sql = "SELECT Assignments FROM traveldemoclusters where UserID = 'nrDJJrO7R9+wXSYKT8y6Sz'";
+                string column = string.Empty;
+                if (User?.Identity?.IsAuthenticated ?? false)
+                    column = "UserAuthenticatedId";
+                else
+                    column = "UserId";
+
+                //TODO: remove this code, just for testing
+                userId = "nrDJJrO7R9+wXSYKT8y6Sz";
+
+                var sql = "SELECT TOP(1) * FROM traveldemoclusters where " + column + " = @userId";
                 try
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(sql, connection);
+                    command.Parameters.Add(new SqlParameter("@userId", userId));
                     SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
-                        // clusterId = (int)reader["Assignments"];
-                       
+                        clusterId = Convert.ToString(reader["Assignments"]);                       
                     }
-                    return clusterId;
+                    return clusterId == "0" ? "1" : clusterId;
                 }
                 catch (Exception ex)
                 {
-
                     throw;
                 }
                

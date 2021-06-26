@@ -6,6 +6,8 @@ let context = {
 let userAgent = {};
 
 var personalizerCallResult = "";
+var personalizedTourActivities = "";
+
 function getRecommendation() {
     const requestContext = {
         device: context.device
@@ -26,15 +28,11 @@ $(document).ready(function () {
         personalizerCallResult = result;
         UpdateDataWithPersonalizer(personalizerCallResult);
     });
-    
-    //appInsights.context.user.authenticatedId
-    //appInsights.context.user.id
-    //GetPersonalizedTourActivities();
-    //GetClusterData();
-    //$("#PriorityOne").attr("src", "");
-    //$("#PriorityTwo").attr("src", "");
-    //$("#PriorityOne").attr("src", "");
 
+    getPersonalizedTourActivities().then(result => {
+        personalizedTourActivities = result;
+        ShowPersonalizedTourActivities(personalizedTourActivities);
+    });
 });
 
 function UpdateDataWithPersonalizer(personalizerCallResult) {
@@ -43,7 +41,14 @@ function UpdateDataWithPersonalizer(personalizerCallResult) {
         $(".img-responsive").attr("src", img);
         $("#featureTourTitle").html(res.title);
     });
-  }
+}
+
+function ShowPersonalizedTourActivities(personalizedTourActivities) {
+    personalizedTourActivities.forEach(function (item, i) {
+        $("#promotour" + i + " img").attr("src", item.image);
+        $("#promotour" + i + " div").html(item.title);
+    });
+}
 
 function getTourDetails(tourId) {
     const requestBody = {
@@ -59,9 +64,9 @@ function getTourDetails(tourId) {
     }).then(r => r.json());
 }
 
-function getTourActivity() {
+function getPersonalizedTourActivities() {
     return fetch("/Tour/GetPersonalizedTourActivities", {
-        method: "POST",
+        method: "GET",
         headers: {
             "Content-Type": "application/json"
         },

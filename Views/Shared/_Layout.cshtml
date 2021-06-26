@@ -64,7 +64,6 @@
     @if (User.Identity.IsAuthenticated)
     {
         var userID = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        //ADL.PersonalizedTravel.Utilities.AppInsightsHelper.SetUserContext(userID);
         <script>
         appInsights.setAuthenticatedUserContext("@userID.Value");
         </script>
