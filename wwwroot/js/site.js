@@ -47,7 +47,9 @@ function ShowPersonalizedTourActivities(personalizedTourActivities) {
     personalizedTourActivities.forEach(function (item, i) {
         $("#promotour" + i + " img").attr("src", item.image);
         $("#promotour" + i + " div").html(item.title);
+        $("#activityLink" + i).attr("data-id", item.id);
     });
+   
 }
 
 function getTourDetails(tourId) {
@@ -55,7 +57,22 @@ function getTourDetails(tourId) {
         Id: tourId
     };
 
-    return fetch("/Tour/GetTour", {
+    return fetch("/Tour/GetTourCategory", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    }).then(r => r.json());
+}
+
+function getActivityDetails(tourId, tourCategoryId) {
+    const requestBody = {
+        Id: tourId,
+        TourCategoryId: tourCategoryId
+    };
+
+    return fetch("/Tour/GetTourActivity", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -84,14 +101,18 @@ function GetClusterData() {
     }).then(r => r.json());
 }
 
-
 $("#tourLink").click(function (event) {
     event.preventDefault();
     sendReward(personalizerCallResult.eventId, 1).then(() => {
-        location.href = "/Home/Tour/"+personalizerCallResult.rewardActionId;
+        location.href = "/Tour/TourCategoryDetail/"+personalizerCallResult.rewardActionId;
     });
 });
 
+$(".tourInterest a").click(function (event) {
+    event.preventDefault();
+    var dataId = $(this).attr("data-id");
+    location.href = "/Tour/TourActivityDetail/" + dataId;
+});
 
 function sendReward(eventid, value) {
     return fetch("/Tour/Reward", {

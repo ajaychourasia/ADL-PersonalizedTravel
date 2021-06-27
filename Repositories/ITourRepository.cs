@@ -10,8 +10,10 @@ namespace ADL.PersonalizedTravel.Repositories
     public interface ITourRepository
     {
         IList<TourCategory> GetTour();
-        TourCategory GetTour(string id);
+        TourCategory GetTourCategory(string id);
 
         List<TourActivity> GetTourActivity(string id);
+
+        TourActivity GetTourActivityDetail(string tourId);
     }
 }

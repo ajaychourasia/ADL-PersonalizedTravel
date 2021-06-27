@@ -9,8 +9,6 @@ namespace ADL.PersonalizedTravel.Models
     {
         public bool UseUserAgent { get; set; }
 
-        //public string TripType { get; set; }
-
         public string TravelerHistory { get; set; }
 
         public string Device { get; set; }

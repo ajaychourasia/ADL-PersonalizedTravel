@@ -71,6 +71,7 @@ p.outset {
     font-size: xx-large;
     color: black;
     background-color: darkturquoise;
+    opacity: initial;
 }
 
 .recomm {
@@ -79,3 +80,28 @@ p.outset {
 .suggest {
     margin: 0px 0px 1px 5px;
 }
+
+.dl-horizontal dd {
+    text-align: center;
+    letter-spacing: 0px;
+    font-size: 20px;
+    margin-left: 0px !important;
+    font-family: auto;
+}
+.navbar-inverse {
+    background-color: darkblue;
+    border-color: #080808;
+}
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    letter-spacing: 0px;
+    font-size: 20px;
+    font-family: auto;
+}
+
+

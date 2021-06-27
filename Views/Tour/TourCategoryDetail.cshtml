@@ -1,0 +1,23 @@
+﻿@model TourCategory
+
+@{
+    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+   <hr />
+    <dl class="dl-horizontal">
+       <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        
+        <dd>
+            <img src="@Url.Content(Model.Image)" alt="Image" />
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+ </div>
+

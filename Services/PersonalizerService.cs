@@ -25,7 +25,6 @@ namespace ADL.PersonalizedTravel.Services
         {
             var eventId = Guid.NewGuid().ToString();
             var actions = _actionsRepository.GetActions();
-            //get Details Age ,gender, Trip and paas in Reuest
             var request = new RankRequest(actions, context, null, eventId);
             RankResponse response = _personalizerClient.Rank(request);
             return response;

@@ -13,5 +13,6 @@ namespace ADL.PersonalizedTravel.Data
             : base(options)
         {
         }
+        public DbSet<ADL.PersonalizedTravel.Models.TourActivity> TourActivity { get; set; }
     }
 }

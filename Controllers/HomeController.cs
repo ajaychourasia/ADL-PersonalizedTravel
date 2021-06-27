@@ -30,24 +30,16 @@ namespace ADL.PersonalizedTravel.Controllers
             return View();
         }
 
-        public IActionResult Tour(string id)
-        {
-            var model = _tourRepository.GetTour(id);
-            AppInsightsHelper.TrackPageView(model.Title); 
-            ViewData["Title"] = model.Title;
-            return View(model);
-        }
-
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Explore more about Enthociast Tour & Travel.";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Contact us for more fun with travel.";
 
             return View();
         }

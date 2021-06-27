@@ -7,18 +7,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ADL.PersonalizedTravel.Models
 {
-   
-    //public class AppRole : IdentityRole
-    //{
-    //    public AppRole() { }
-
-    //    public AppRole(string name)
-    //    {
-    //        Name = name;
-    //    }
-    //}
-
-
     public class AppUser : IdentityUser
     {
            

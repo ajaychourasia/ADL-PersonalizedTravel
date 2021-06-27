@@ -21,6 +21,7 @@ namespace ADL.PersonalizedTravel.Controllers
         private TelemetryClient _telemetry;
         public UserManager<AppUser> _userManager { get; set; }
         public string tourId = string.Empty;
+        public string tourActivityId = string.Empty;
 
         public TourController(IPersonalizerService service, UserManager<AppUser> userManager , ITourRepository tourRepository ,TelemetryClient telemetry)
         {
@@ -30,10 +31,8 @@ namespace ADL.PersonalizedTravel.Controllers
             _telemetry = telemetry;
         }
       
-        //[Route("Tour/Recommendation")]
         public async Task<JsonResult> Recommendation([FromBody] UserContext context)
         {
-            
             //if user login Fill details 
             if (User?.Identity?.IsAuthenticated ?? false)
             {
@@ -45,28 +44,35 @@ namespace ADL.PersonalizedTravel.Controllers
             //Get User default data irrespective of login
             context.PartofDay = Utility.GetPartofDay();
             context.Season = Utility.GetSeason();
-            
             var currentContext = this.CreatePersonalizerContext(context, context.UseUserAgent ? Request : null);
-
             return new JsonResult(_service.GetTourRecommendations(currentContext));
         }
 
-        public JsonResult GetTour([FromBody] TourCategory tour)
+        public JsonResult GetTourCategory([FromBody] TourCategory tour)
         {
             tourId = tour.Id;
-            var model = _tourRepository.GetTour(tour.Id);
-             return new JsonResult(model);
+            var model = _tourRepository.GetTourCategory(tour.Id);
+            return new JsonResult(model);
+        }
+        public IActionResult TourCategoryDetail(string id)
+        {
+            var model = _tourRepository.GetTourCategory(id);
+            AppInsightsHelper.TrackPageView(model.Title); 
+            ViewData["Title"] = model.Title;
+            return View(model);
         }
 
-        //[Route("Tour/Reward")]
+        public IActionResult TourActivityDetail(string id)
+        {
+            tourId = id;
+            var model = _tourRepository.GetTourActivityDetail(tourId);
+            return View(model);
+           
+        }
+
         public void Reward([FromBody] Reward reward)
         {
             _service.Reward(reward);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public JsonResult GetPersonalizedTourActivities()
@@ -90,38 +96,15 @@ namespace ADL.PersonalizedTravel.Controllers
 
         public string GetCluster(string userId)
         {
-            string clusterId = "1";
-            string SqlConnection = "Server=tcp:traveldemosqlserver.database.windows.net,1433;Initial Catalog=traveldemoapp;Persist Security Info=False;User ID=azureuser;Password={*****}; MultipleActiveResultSets =False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            using (var connection = new SqlConnection(SqlConnection))
-            {
-                string column = string.Empty;
-                if (User?.Identity?.IsAuthenticated ?? false)
-                    column = "UserAuthenticatedId";
-                else
-                    column = "UserId";
-
-                //TODO: remove this code, just for testing
-                userId = "nrDJJrO7R9+wXSYKT8y6Sz";
-
-                var sql = "SELECT TOP(1) * FROM traveldemoclusters where " + column + " = @userId";
-                try
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(sql, connection);
-                    command.Parameters.Add(new SqlParameter("@userId", userId));
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        clusterId = Convert.ToString(reader["Assignments"]);                       
-                    }
-                    return clusterId == "0" ? "1" : clusterId;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-               
-            }
+            DbQuery dbQuery = new DbQuery();
+            string clusterId = dbQuery.GetDbResultSet(userId);
+            return clusterId;
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
     }
 }

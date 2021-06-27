@@ -9,20 +9,7 @@ namespace ADL.PersonalizedTravel.Utilities
 {
     public static class AppInsightsHelper
     {
-        public static void TrackException(Exception exc)
-        {
-
-        }
        
-
-
-        public static void TrackEvent(string eventName, Dictionary<string, string> properties)
-        {
-            //var tc = new TelemetryClient();
-            //tc.TrackEvent(eventName,properties);
-
-        }
-
         public static void TrackPageView(string eventName)
         {
             TelemetryConfiguration configuration = TelemetryConfiguration.CreateDefault();
@@ -36,10 +23,20 @@ namespace ADL.PersonalizedTravel.Utilities
 
             Task.Delay(5000).Wait();
         }
-
-        public static void SetUserContext()
+        public static void TrackException(Exception exc)
         {
-           
+            //Use this for future use 
         }
+
+        public static void TrackEvent(string eventName, Dictionary<string, string> properties)
+        {
+            //Use this to track Event for future use
+
+            //var tc = new TelemetryClient();
+            //tc.TrackEvent(eventName,properties);
+
+        }
+
+
     }
 }

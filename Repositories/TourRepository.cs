@@ -36,7 +36,12 @@ namespace ADL.PersonalizedTravel.Repositories
         {
             return _activity.Where(activity => tourId == activity.TourCategoryId).ToList();
         }
-        public TourCategory GetTour(string id)
+
+        public TourActivity GetTourActivityDetail(string tourId)
+        {
+            return _activity.FirstOrDefault(activity => tourId == activity.Id);
+        }
+        public TourCategory GetTourCategory(string id)
         {
             return _tours.FirstOrDefault(tours => tours.Id == id);
         }

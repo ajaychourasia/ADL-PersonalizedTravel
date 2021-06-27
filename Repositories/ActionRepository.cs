@@ -12,9 +12,6 @@ namespace ADL.PersonalizedTravel.Repositories
 
         public ActionRepository(IHostingEnvironment hostingEnvironment)
         {
-            //var fileProvider = hostingEnvironment.ContentRootFileProvider;
-            //var fileContent = System.IO.File.ReadAllText(fileProvider.GetFileInfo("Actions/actions.json").PhysicalPath);
-            //_actions = JsonConvert.DeserializeObject<List<Action>>(fileContent).Where(a => a.Enabled).ToList<Action>();
             _actions = new List<Action>
             {
                 new Action {Id ="1", Title="Trek" ,Image = "https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg"},
