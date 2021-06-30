@@ -39,7 +39,7 @@ function UpdateDataWithPersonalizer(personalizerCallResult) {
     getTourDetails(personalizerCallResult.rewardActionId).then(res => {
         var img = res.image;
         $(".img-responsive").attr("src", img);
-        $("#featureTourTitle").html(res.title);
+        $("#featureTourTitle").html(" Explore Best Of  " + res.title+ " Experiences");
     });
 }
 

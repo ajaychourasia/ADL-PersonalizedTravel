@@ -24,8 +24,10 @@ namespace ADL.PersonalizedTravel
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfig = configuration;
         }
 
+        public static IConfiguration StaticConfig { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.

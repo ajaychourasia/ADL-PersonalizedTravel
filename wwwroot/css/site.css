@@ -56,22 +56,26 @@ body {
     display: table;
 }
 p.outset {
-    border-style: outset;
     text-align: center;
-    background-color: darkcyan;
-    color: white;
-    font-size: x-large;
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
 }
 .centered {
     position: absolute;
-    top: 10%;
+    top: 17%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: -webkit-pictograph;
-    font-size: xx-large;
-    color: black;
-    background-color: darkturquoise;
-    opacity: initial;
+    font-family: auto;
+    font-size: initial;
+    color: white;
+    width: 75%;
+    height: 10%;
+    box-shadow: 0 0 1rem 0 rgb(0 0 0);
+    border-radius: 5px;
+    z-index: 1;
+    backdrop-filter: contrast(0.5);
+    text-align: center;
 }
 
 .recomm {
@@ -79,6 +83,8 @@ p.outset {
 }
 .suggest {
     margin: 0px 0px 1px 5px;
+    font-family: "Poppins", sans-serif;
+    font-size: 19px;
 }
 
 .dl-horizontal dd {
@@ -104,4 +110,15 @@ p.outset {
     font-family: auto;
 }
 
+
+#featureTourTitle {
+    font-size: 5rem;
+    font-weight: 400;
+    line-height: 1.22;
+    letter-spacing: -2px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color:white;
+}
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
 
@@ -6,11 +7,13 @@ namespace ADL.PersonalizedTravel.Utilities
 {
     public class DbQuery :Controller
     {
+       
         public string GetDbResultSet(string userId)
         {
             string clusterId = "0";
-            string SqlConnection = "Server=tcp:traveldemosqlserver.database.windows.net,1433;Initial Catalog=traveldemoapp;Persist Security Info=False;User ID=azureuser;Password={****}; MultipleActiveResultSets =False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            using (var connection = new SqlConnection(SqlConnection))
+            string sqlConnection = Startup.StaticConfig.GetConnectionString("AzureDbConnection");
+           
+            using (var connection = new SqlConnection(sqlConnection))
             {
                 string column = string.Empty;
                 if (User?.Identity?.IsAuthenticated ?? false)
@@ -19,7 +22,7 @@ namespace ADL.PersonalizedTravel.Utilities
                     column = "UserId";
 
                 //TODO: remove this code, just for testing
-                //userId = "nrDJJrO7R9+wXSYKT8y6Sz";
+                userId = "nrDJJrO7R9+wXSYKT8y6Sz";
 
                 var sql = "SELECT TOP(1) * FROM traveldemoclusters where " + column + " = @userId";
                 try
