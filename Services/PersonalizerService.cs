@@ -20,16 +20,35 @@ namespace ADL.PersonalizedTravel.Services
             _personalizerClient = personalizerClient;
             _actionRepository = actionRepository;
         }
-
+        /// <summary>
+        /// Get User tour recommendations based on Previous actions
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public RankResponse GetTourRecommendations(IList<object> context)
         {
+            RankResponse response = null;
             var eventId = Guid.NewGuid().ToString();
             var actions = _actionsRepository.GetActions();
             var request = new RankRequest(actions, context, null, eventId);
-            RankResponse response = _personalizerClient.Rank(request);
+            try
+            {
+                 response = _personalizerClient.Rank(request);
+            }
+            catch (Exception ex)
+            {
+                //Log excetion
+                //[NOTE: Throwing an Exception is being ignored to excute default workflow for Demo purpose]
+            }
+
             return response;
         }
 
+        /// <summary>
+        /// Get user ranked based on Tour actions 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public IList<Models.Action> GetRankedTour(IList<object> context)
         {
             var recommendations = GetTourRecommendations(context).Ranking.Select(x => x.Id).ToList();
@@ -38,6 +57,10 @@ namespace ADL.PersonalizedTravel.Services
             return actions.OrderBy(action => recommendations.IndexOf(action.Id)).ToList();
         }
 
+        /// <summary>
+        /// Return Rewards 
+        /// </summary>
+        /// <param name="reward"></param>
         public void Reward(Reward reward)
         {
             _personalizerClient.Reward(reward.EventId, new RewardRequest(reward.Value));

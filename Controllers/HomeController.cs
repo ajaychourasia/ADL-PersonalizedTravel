@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ADL.PersonalizedTravel.Models;
 using ADL.PersonalizedTravel.Services;
-using ADL.PersonalizedTravel.Controllers.Extensions;
 using ADL.PersonalizedTravel.Repositories;
-using Microsoft.AspNetCore.Identity;
-using ADL.PersonalizedTravel.Utilities;
 
 namespace ADL.PersonalizedTravel.Controllers
 {

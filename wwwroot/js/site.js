@@ -30,13 +30,25 @@ $(document).ready(function () {
     });
 
     getPersonalizedTourActivities().then(result => {
+        if (result == null) {
+            return;
+        }
         personalizedTourActivities = result;
         ShowPersonalizedTourActivities(personalizedTourActivities);
     });
 });
 
 function UpdateDataWithPersonalizer(personalizerCallResult) {
+    if (personalizerCallResult == null) {
+        $(".img-responsive").attr("src", 'https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg');
+        $("#featureTourTitle").html(" Explore Best Of  " + 'Trek' + " Experiences");
+        return;
+    }
     getTourDetails(personalizerCallResult.rewardActionId).then(res => {
+        if (res == null ||res.image ==" " || res == 'undefined' || res == " ") {
+            res.image = 'https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg',
+            res.title ='Trek'
+        }
         var img = res.image;
         $(".img-responsive").attr("src", img);
         $("#featureTourTitle").html(" Explore Best Of  " + res.title+ " Experiences");
@@ -103,6 +115,9 @@ function GetClusterData() {
 
 $("#tourLink").click(function (event) {
     event.preventDefault();
+    if (personalizerCallResult == null || event == null) {
+        return;
+    }
     sendReward(personalizerCallResult.eventId, 1).then(() => {
         location.href = "/Tour/TourCategoryDetail/"+personalizerCallResult.rewardActionId;
     });

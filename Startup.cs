@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ADL.PersonalizedTravel.Data;
@@ -37,7 +31,8 @@ namespace ADL.PersonalizedTravel
             var personalizationApiKey = Configuration["PersonalizationApiKey"];
             if (string.IsNullOrEmpty(personalizationEndPoint) || string.IsNullOrEmpty(personalizationApiKey))
             {
-                ///throw new ArgumentException("Missing Azure Personalizer endpoint and/or api key.");
+                //Log excetion
+                //[NOTE: Throwing an Exception is being ignored to excute default workflow for Demo purpose]
             }
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -57,7 +52,6 @@ namespace ADL.PersonalizedTravel
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<AppUser>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
-            //services.AddIdentity<AppUser,IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions aiOptions                = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions();            aiOptions.EnableRequestTrackingTelemetryModule = false;            services.AddApplicationInsightsTelemetry(aiOptions);
@@ -91,12 +85,12 @@ namespace ADL.PersonalizedTravel
                     template: "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
-                 name: "recommendation",
-                 template: "{controller=Tour}/{action=Recommendation}");
+                    name: "recommendation",
+                    template: "{controller=Tour}/{action=Recommendation}");
 
                 routes.MapRoute(
-               name: "reward",
-               template: "{controller=Tour}/{action=Reward}/{id?}");
+                    name: "reward",
+                    template: "{controller=Tour}/{action=Reward}/{id?}");
             });
         }
         private IPersonalizerClient CreateClient(string uri, string ApiKey)

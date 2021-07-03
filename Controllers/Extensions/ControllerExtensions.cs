@@ -8,13 +8,12 @@ namespace ADL.PersonalizedTravel.Controllers.Extensions
 {
     public static class ControllerExtensions
     {
-        //try changing name
+       
         public static IList<object> CreatePersonalizerContext(this Controller controller, UserContext context, HttpRequest request)
         {
             var result = new List<object>
             {
                 new {context.Device,
-                    //context.TripType,
                     context.TravelerHistory,
                     context.Gender,
                     context.TripPreference,

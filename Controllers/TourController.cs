@@ -4,18 +4,14 @@ using ADL.PersonalizedTravel.Services;
 using ADL.PersonalizedTravel.Controllers.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
-using System;
 using ADL.PersonalizedTravel.Utilities;
 using ADL.PersonalizedTravel.Repositories;
-using System.Data.SqlClient;
 using Microsoft.ApplicationInsights;
 
 namespace ADL.PersonalizedTravel.Controllers
 {
-    //[Route("api/[controller]")]
     public class TourController : Controller
     {
-
         private readonly IPersonalizerService _service;
         private readonly ITourRepository _tourRepository;
         private TelemetryClient _telemetry;
@@ -96,8 +92,8 @@ namespace ADL.PersonalizedTravel.Controllers
 
         public string GetCluster(string userId)
         {
-            DbQuery dbQuery = new DbQuery();
-            string clusterId = dbQuery.GetDbResultSet(userId);
+            string clusterId =  DbQuery.GetDbResultSet(userId, User?.Identity?.IsAuthenticated ?? false);
+        
             return clusterId;
         }
 

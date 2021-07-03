@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ADL.PersonalizedTravel.Models
 {
-   
+
     public class TourCategory
     {
         public TourCategory()
@@ -23,6 +23,6 @@ namespace ADL.PersonalizedTravel.Models
 
         public string Description { get; set; }
 
-      
+
     }
 }

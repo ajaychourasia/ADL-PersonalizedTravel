@@ -5,10 +5,10 @@ using System.Data.SqlClient;
 
 namespace ADL.PersonalizedTravel.Utilities
 {
-    public class DbQuery :Controller
+    public static class DbQuery
     {
        
-        public string GetDbResultSet(string userId)
+        public static string GetDbResultSet(string userId , bool isAuthenticated)
         {
             string clusterId = "0";
             string sqlConnection = Startup.StaticConfig.GetConnectionString("AzureDbConnection");
@@ -16,13 +16,10 @@ namespace ADL.PersonalizedTravel.Utilities
             using (var connection = new SqlConnection(sqlConnection))
             {
                 string column = string.Empty;
-                if (User?.Identity?.IsAuthenticated ?? false)
+                if (isAuthenticated)
                     column = "UserAuthenticatedId";
                 else
                     column = "UserId";
-
-                //TODO: remove this code, just for testing
-                userId = "nrDJJrO7R9+wXSYKT8y6Sz";
 
                 var sql = "SELECT TOP(1) * FROM traveldemoclusters where " + column + " = @userId";
                 try
@@ -39,7 +36,10 @@ namespace ADL.PersonalizedTravel.Utilities
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    //[NOTE: Throwing an Exception is being ignored to excute default workflow for Demo purpose]
+                    //[Known Exception Type : Client IP address needs to be whitelisted in Azure portal for Azure SQL DB]
+                    //throw;
+                    return clusterId == "0" ? "1" : clusterId;
                 }
 
             }

@@ -43,6 +43,7 @@ namespace ADL.PersonalizedTravel.Repositories
         }
         public TourCategory GetTourCategory(string id)
         {
+            if (id == "") return null;
             return _tours.FirstOrDefault(tours => tours.Id == id);
         }
 

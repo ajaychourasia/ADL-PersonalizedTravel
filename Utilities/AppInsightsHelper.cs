@@ -25,18 +25,13 @@ namespace ADL.PersonalizedTravel.Utilities
         }
         public static void TrackException(Exception exc)
         {
-            //Use this for future use 
+            //Use this to track Exception for future use 
         }
 
         public static void TrackEvent(string eventName, Dictionary<string, string> properties)
         {
             //Use this to track Event for future use
-
-            //var tc = new TelemetryClient();
-            //tc.TrackEvent(eventName,properties);
-
         }
-
 
     }
 }
