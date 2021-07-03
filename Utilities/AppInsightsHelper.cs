@@ -13,7 +13,6 @@ namespace ADL.PersonalizedTravel.Utilities
         public static void TrackPageView(string eventName)
         {
             TelemetryConfiguration configuration = TelemetryConfiguration.CreateDefault();
-            configuration.InstrumentationKey = "";
             var telemetryClient = new TelemetryClient(configuration);
 
             telemetryClient.TrackPageView(eventName);

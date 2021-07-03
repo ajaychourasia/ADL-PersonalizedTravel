@@ -25,7 +25,7 @@ namespace ADL.PersonalizedTravel.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Explore more about Enthociast Tour & Travel.";
+            ViewData["Message"] = "Explore more about Enthusiast Tour & Travel.";
 
             return View();
         }

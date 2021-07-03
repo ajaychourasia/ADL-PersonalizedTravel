@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using ADL.PersonalizedTravel.Utilities;
 using ADL.PersonalizedTravel.Repositories;
-using Microsoft.ApplicationInsights;
 
 namespace ADL.PersonalizedTravel.Controllers
 {
@@ -14,22 +13,21 @@ namespace ADL.PersonalizedTravel.Controllers
     {
         private readonly IPersonalizerService _service;
         private readonly ITourRepository _tourRepository;
-        private TelemetryClient _telemetry;
+
         public UserManager<AppUser> _userManager { get; set; }
         public string tourId = string.Empty;
         public string tourActivityId = string.Empty;
 
-        public TourController(IPersonalizerService service, UserManager<AppUser> userManager , ITourRepository tourRepository ,TelemetryClient telemetry)
+        public TourController(IPersonalizerService service, UserManager<AppUser> userManager , ITourRepository tourRepository)
         {
             _service = service;
             _userManager = userManager;
             _tourRepository = tourRepository;
-            _telemetry = telemetry;
         }
       
         public async Task<JsonResult> Recommendation([FromBody] UserContext context)
         {
-            //if user login Fill details 
+            //if user signs-in, add more details to context
             if (User?.Identity?.IsAuthenticated ?? false)
             {
                 var appUser = await _userManager.GetUserAsync(User);
@@ -37,7 +35,7 @@ namespace ADL.PersonalizedTravel.Controllers
                 context.TripPreference = appUser.TripPreference;
                 context.Country = appUser.Country;
             }
-            //Get User default data irrespective of login
+            //Set User default context irrespective of login (Guest User case)
             context.PartofDay = Utility.GetPartofDay();
             context.Season = Utility.GetSeason();
             var currentContext = this.CreatePersonalizerContext(context, context.UseUserAgent ? Request : null);
@@ -53,6 +51,7 @@ namespace ADL.PersonalizedTravel.Controllers
         public IActionResult TourCategoryDetail(string id)
         {
             var model = _tourRepository.GetTourCategory(id);
+            //Send Page View event to App Insights telemetry
             AppInsightsHelper.TrackPageView(model.Title); 
             ViewData["Title"] = model.Title;
             return View(model);

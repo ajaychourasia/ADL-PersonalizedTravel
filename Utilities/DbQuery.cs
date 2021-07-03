@@ -7,7 +7,8 @@ namespace ADL.PersonalizedTravel.Utilities
 {
     public static class DbQuery
     {
-       
+        //We used Azure SQL DB (traveldemoclusters) to export out the users data with clusters (output of Azure ML pipeline after clustering algorithm)
+        //Refer provided spreadsheet for sample data
         public static string GetDbResultSet(string userId , bool isAuthenticated)
         {
             string clusterId = "0";
@@ -32,16 +33,15 @@ namespace ADL.PersonalizedTravel.Utilities
                     {
                         clusterId = Convert.ToString(reader["Assignments"]);
                     }
-                    return clusterId == "0" ? "1" : clusterId;
                 }
                 catch (Exception ex)
                 {
-                    //[NOTE: Throwing an Exception is being ignored to excute default workflow for Demo purpose]
+                    //[NOTE: Throwing an Exception is being ignored to execute default workflow for Demo purpose]
                     //[Known Exception Type : Client IP address needs to be whitelisted in Azure portal for Azure SQL DB]
                     //throw;
-                    return clusterId == "0" ? "1" : clusterId;
                 }
-
+                //Return default cluster in-case no Azure SQL DB configured (fallback option)
+                return clusterId == "0" ? "1" : clusterId;
             }
         }
     }

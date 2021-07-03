@@ -40,12 +40,14 @@ $(document).ready(function () {
 
 function UpdateDataWithPersonalizer(personalizerCallResult) {
     if (personalizerCallResult == null) {
+        //If Azure Personalizer Service connection failed, display default Tour category (fallback option)
         $(".img-responsive").attr("src", 'https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg');
         $("#featureTourTitle").html(" Explore Best Of  " + 'Trek' + " Experiences");
         return;
     }
     getTourDetails(personalizerCallResult.rewardActionId).then(res => {
-        if (res == null ||res.image ==" " || res == 'undefined' || res == " ") {
+        if (res == null || res.image == " " || res == 'undefined' || res == " ") {
+            //If Server returns empty result, display default Tour category
             res.image = 'https://cdn.pixabay.com/photo/2020/10/12/19/10/mountaineers-5649828_960_720.jpg',
             res.title ='Trek'
         }
@@ -116,7 +118,8 @@ function GetClusterData() {
 $("#tourLink").click(function (event) {
     event.preventDefault();
     if (personalizerCallResult == null || event == null) {
-        return;
+        //If Azure Personalizer Service connection failed, redirect to default Tour category
+        location.href = "/Tour/TourCategoryDetail/1";
     }
     sendReward(personalizerCallResult.eventId, 1).then(() => {
         location.href = "/Tour/TourCategoryDetail/"+personalizerCallResult.rewardActionId;

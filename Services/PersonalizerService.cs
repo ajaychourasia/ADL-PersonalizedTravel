@@ -38,7 +38,7 @@ namespace ADL.PersonalizedTravel.Services
             catch (Exception ex)
             {
                 //Log excetion
-                //[NOTE: Throwing an Exception is being ignored to excute default workflow for Demo purpose]
+                //[NOTE: Throwing an Exception is being ignored to execute default workflow for Demo purpose]
             }
 
             return response;
